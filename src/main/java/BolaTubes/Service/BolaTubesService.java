@@ -62,22 +62,25 @@ public class BolaTubesService {
 
         if(!pilhaOrigem.getBolas().isEmpty()){
 
-            Bola bola = pilhaOrigem.getBolas().getFirst();  // Retira a bola do topo da pilha origem
+            Bola bola = pilhaOrigem.getBolas().getFirst();  // seleciona a bola do topo
 
             if(bola.isMovida()){  // Se a bola já foi movida, não permita movê-la novamente
                 return false;
             }
+            if(pilhaDestino.topoCorIgual(bola) || pilhaDestino.getBolas().isEmpty()) {
 
-            pilhaOrigem.getBolas().removeFirst();
-            bola.setMovida(true);
+                pilhaOrigem.getBolas().removeFirst();
+                bola.setMovida(true);
 
 
-            System.out.println("Movendo bola de " + origem + " para " + destino + ": " + bola.getCor());
+                System.out.println("Movendo bola de " + origem + " para " + destino + ": " + bola.getCor());
 
-            // Adiciona a bola no topo da pilha destino
-            boolean sucesso = pilhaDestino.adicionarBola(bola);
-            System.out.println("Bola movida com sucesso: " + sucesso);
-            return sucesso;
+                // Adiciona a bola no topo da pilha destino
+                boolean sucesso = pilhaDestino.adicionarBola(bola);
+                System.out.println("Bola movida com sucesso: " + sucesso);
+                return sucesso;
+            }
+            return false;
         }
         return false;
     }
