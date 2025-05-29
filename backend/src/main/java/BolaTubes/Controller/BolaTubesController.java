@@ -1,16 +1,21 @@
 package BolaTubes.Controller;
+import java.util.List;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import BolaTubes.Model.MovimentoRequestDTO;
 import BolaTubes.Model.Pilha;
 import BolaTubes.Service.BolaTubesService;
-import BolaTubes.Model.Bola;
-import java.util.List;
-import BolaTubes.Service.BolaTubesService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/BolaTubes")
-
+@CrossOrigin(origins = "http://localhost:5173")
 public class BolaTubesController {
 
     private final BolaTubesService bolaTubesService;
@@ -24,14 +29,14 @@ public class BolaTubesController {
         return bolaTubesService.getPilhas();
     }
     @PostMapping("jogo/iniciar")
-    public ResponseEntity<Void> iniciarJogo() {
+    public List<Pilha> iniciarJogo() {
         bolaTubesService.iniciarJogo();
-        return ResponseEntity.ok().build();
+        return bolaTubesService.getPilhas();
     }
 
     @PostMapping("jogo/mover")
-    public boolean moverBola(@RequestParam int origem, @RequestParam int destino){
-        return bolaTubesService.moverBola(origem, destino);
+    public boolean moverBola(@RequestBody MovimentoRequestDTO movimentoRequest){
+        return bolaTubesService.moverBola(movimentoRequest.getOrigem(), movimentoRequest.getDestino());
     }
 
     @GetMapping("jogo/finalizado")
