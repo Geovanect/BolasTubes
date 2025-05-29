@@ -1,0 +1,42 @@
+/* src/components/Tube.css */
+.tube {
+  width: 60px;
+  height: 240px; /* 4 bolas * 60px de altura (incluindo padding/margem) */
+  border: 2px solid #555;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column-reverse; /* Bolas são adicionadas visualmente de baixo para cima */
+  align-items: center;
+  margin: 10px;
+  padding-top: 5px; /* Espaço para a borda superior do tubo não cortar a bola */
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tube:hover {
+  border-color: #007bff;
+}
+
+.tube.selected {
+  border: 3px solid gold;
+  box-shadow: 0 0 10px gold;
+}
+
+.ball {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin-bottom: 5px; /* Espaço entre as bolas */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px; /* Se for mostrar algo dentro da bola */
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+/* Se houver um estado de bola selecionada (não implementado ainda) */
+/* .ball.selected {
+  border: 2px dashed yellow;
+} */
