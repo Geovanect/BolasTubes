@@ -1,14 +1,14 @@
 /* src/components/Tube.css */
 .tube {
-  width: 60px;
-  height: 240px; /* 4 bolas * 60px de altura (incluindo padding/margem) */
+  width: 38px;
+  height: 240px; /* Reduzido para caber 7 bolas menores */
   border: 2px solid #555;
   border-radius: 10px;
   display: flex;
   flex-direction: column-reverse; /* Bolas são adicionadas visualmente de baixo para cima */
   align-items: center;
-  margin: 10px;
-  padding-top: 5px; /* Espaço para a borda superior do tubo não cortar a bola */
+  margin: 6px;
+  padding: 6px 0; /* Ajustado o padding para distribuir melhor o espaço */
   background-color: #f0f0f0;
   cursor: pointer;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -24,10 +24,10 @@
 }
 
 .ball {
-  width: 45px;
-  height: 45px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  margin-bottom: 5px; /* Espaço entre as bolas */
+  margin: 2.5px 0; /* Ajustado para ter margem igual em cima e embaixo */
   display: flex;
   justify-content: center;
   align-items: center;

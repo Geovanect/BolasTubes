@@ -9,7 +9,7 @@ public class Pilha {
     }
 
     public boolean estaCheia(){
-        return bolas.size() == 4;
+        return bolas.size() == 7;
     }
 
     public boolean topoCorIgual(Bola bola){
@@ -17,7 +17,7 @@ public class Pilha {
     }
 
     public boolean adicionarBola(Bola bola){
-        if(bolas.size() < 4 ){
+        if(bolas.size() < 7 ){
             bolas.push(bola);
             return true;
         }

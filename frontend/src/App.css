@@ -6,11 +6,40 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden; /* Previne scroll horizontal */
 }
 
 .game-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr); /* 4 tubos por linha */
   gap: 20px;
   justify-items: center;
+  align-items: start;
+  justify-content: center;
+  padding: 20px;
+  max-width: 100vw;
+  max-height: 90vh;
+  box-sizing: border-box;
+  overflow: hidden; /* Remove scroll e barra de rolagem */
+  margin: 0 auto;
+}
+
+.restart-btn {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  z-index: 1000;
+  background: #ff4d4d;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.2s;
+}
+.restart-btn:hover {
+  background: #d32f2f;
 }

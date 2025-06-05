@@ -12,10 +12,12 @@ import BolaTubes.Model.Pilha;
 
 public class BolaTubesService {
     private static Stack<Pilha> pilhas = new Stack<>();
+    private Integer ultimoOrigem = null;
+    private Integer ultimoDestino = null;
 
     static {
-        for(int i = 0; i < 7; i++){
-            pilhas.add(new Pilha()); // 7 pilhas, capacidade 4 cada (definido em Pilha.java)
+        for(int i = 0; i < 8; i++){
+            pilhas.add(new Pilha()); // 8 pilhas, capacidade 7 cada
         }
     }
 
@@ -23,40 +25,48 @@ public class BolaTubesService {
         for(Pilha pilha : pilhas){
             pilha.getBolas().clear();
         }
+        ultimoOrigem = null;
+        ultimoDestino = null;
 
-        // Usaremos 6 cores distintas para ter 1 tubo vazio no início
-        String[] cores = {"Vermelho", "Azul", "Verde", "Amarelo", "Laranja", "Roxo"};
-        // A 7ª cor ("Branco") não será usada para deixar um tubo vazio ao final da distribuição.
-
+        String[] cores = {"Vermelho", "Azul", "Verde", "Amarelo", "Laranja", "Roxo", "Rosa"};
         Stack<Bola> todasBolas = new Stack<>();
-
-        // Criar 4 bolas de cada uma das 6 cores (Total 24 bolas)
         for(String cor : cores){
-            for(int i = 0; i < 4; i++){ // 4 bolas por cor
+            for(int i = 0; i < 7; i++){
                 todasBolas.add(new Bola(cor));
             }
         }
 
-        Collections.shuffle(todasBolas); // Embaralhar as 24 bolas
-
-        // Distribuir as 24 bolas entre os primeiros 6 tubos, 4 bolas por tubo
-        // O 7º tubo permanecerá vazio.
-        int index = 0;
-        for(int i = 0; i < 6; i++){ // Iterar sobre os primeiros 6 tubos
-            for(int j = 0; j < 4; j++) { // Adicionar 4 bolas a cada um desses 6 tubos
-               if(index < todasBolas.size()) {
-                   pilhas.get(i).adicionarBola(todasBolas.get(index++));
-               } else {
-                   System.err.println("Tentativa de adicionar mais bolas do que o disponível (isso não deveria ocorrer aqui)!");
-                   break;
-               }
+        boolean valido = false;
+        while (!valido) {
+            Collections.shuffle(todasBolas);
+            int index = 0;
+            for(int i = 0; i < 7; i++){
+                pilhas.get(i).getBolas().clear();
+                for(int j = 0; j < 7; j++) {
+                    if(index < todasBolas.size()) {
+                        pilhas.get(i).adicionarBola(todasBolas.get(index++));
+                    }
+                }
             }
+            // pilhas.get(7) estará vazia
+            java.util.Set<String> topos = new java.util.HashSet<>();
+            for(int i = 0; i < 7; i++) {
+                Stack<Bola> bolas = pilhas.get(i).getBolas();
+                if (!bolas.isEmpty()) {
+                    topos.add(bolas.peek().getCor());
+                }
+            }
+            valido = (topos.size() == 7);
         }
-        // Após este loop, pilhas.get(0) a pilhas.get(5) terão 4 bolas cada.
-        // pilhas.get(6) estará vazia, pois foi apenas limpa e não recebeu bolas.
+        pilhas.get(7).getBolas().clear();
     }
 
     public boolean moverBola(int origem, int destino){
+        // Impede desfazer o último movimento imediatamente
+        if (ultimoOrigem != null && ultimoDestino != null && origem == ultimoDestino && destino == ultimoOrigem) {
+            return false;
+        }
+
         if(origem < 0 || origem >= pilhas.size() || destino < 0 || destino >= pilhas.size()){
             return false;
         }
@@ -64,37 +74,26 @@ public class BolaTubesService {
         Pilha pilhaOrigem = pilhas.get(origem);
         Pilha pilhaDestino = pilhas.get(destino);
 
-        if(!pilhaOrigem.getBolas().isEmpty()){
-
-            Bola bola = pilhaOrigem.getBolas().peek();
-
-            if(pilhaDestino.getBolas().isEmpty() || 
-              (!pilhaDestino.estaCheia() && pilhaDestino.topoCorIgual(bola))) {
-
-                pilhaOrigem.getBolas().pop();
-
-                System.out.println("Movendo bola de " + origem + " para " + destino + ": " + bola.getCor());
-
-                boolean sucesso = pilhaDestino.adicionarBola(bola);
-                if (!sucesso) {
-                    System.err.println("Falha ao adicionar bola no destino APESAR das checagens - Pilha destino pode estar cheia.");
-                }
-                System.out.println("Bola movida com sucesso para o backend: " + sucesso);
-                return sucesso;
-            }
+        if(pilhaOrigem.getBolas().isEmpty()){
             return false;
         }
-        return false;
+
+        int espacoDisponivel = 7 - pilhaDestino.getBolas().size();
+        if(espacoDisponivel < 1) {
+            return false;
+        }
+
+        Bola bola = pilhaOrigem.getBolas().pop();
+        pilhaDestino.getBolas().push(bola);
+
+        // Atualiza o último movimento
+        ultimoOrigem = origem;
+        ultimoDestino = destino;
+        return true;
     }
 
     public boolean jogoFinalizado(){
         // Condição de vitória: 6 tubos cheios com cores únicas, 1 tubo vazio.
-        // Ou: Todos os 7 tubos cheios com cores únicas (se todas as 28 bolas forem usadas e redistribuídas)
-        // A lógica atual (todos os tubos cheios com bolas da mesma cor) implica que não haverá tubos vazios no final.
-        // Se um tubo DEVE estar vazio no final, a lógica precisa mudar.
-        // Assumindo que para ganhar, todas as bolas coloridas (24 delas) devem estar em 6 tubos, cada um com sua cor.
-        // E o 7º tubo deve estar vazio.
-
         int tubosCompletosDeUmaCor = 0;
         int tubosVazios = 0;
 
@@ -103,10 +102,10 @@ public class BolaTubesService {
                 tubosVazios++;
                 continue;
             }
-            if(pilha.estaCheia()){ // estáCheia() é 4 bolas
+            if(pilha.estaCheia()){
                 String corBase = null;
                 if (!pilha.getBolas().isEmpty()) {
-                    corBase = pilha.getBolas().peek().getCor(); // Pega a cor de uma bola para comparar
+                    corBase = pilha.getBolas().peek().getCor();
                 }
                 boolean mesmoCor = true;
                 for(Bola bola : pilha.getBolas()){
@@ -119,7 +118,7 @@ public class BolaTubesService {
                     tubosCompletosDeUmaCor++;
                 }
             } else {
-                return false; // Se um tubo não está nem vazio nem cheio e completo, não é estado final.
+                return false;
             }
         }
         // Condição de vitória: 6 tubos completos, cada um com uma única cor, e 1 tubo vazio.
@@ -137,3 +136,4 @@ public class BolaTubesService {
         }
     }
 }
+

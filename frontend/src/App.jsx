@@ -13,6 +13,7 @@ const colorMap = {
   "Amarelo": "yellow",
   "Laranja": "orange",
   "Roxo": "purple",
+  "Rosa": "rosa",
   "Branco": "#ffffff", // Usar código hexadecimal para branco se não houver nome no Tube.jsx
   // Adicionar outras cores se necessário
 };
@@ -28,12 +29,16 @@ export default function App() {
       console.log("Dados recebidos da API:", res.data);
       // res.data é esperado como: [{bolas: [{cor: "Vermelho"}, ...]}, ...]
       setTubos(res.data || []); // Garantir que tubos seja um array
-      setModal({ show: false });
+      setModal({ show: false, title: '' });
       setOrigem(null);
     } catch (error) {
       console.error("Erro ao iniciar o jogo:", error);
       setTubos([]); // Limpar tubos em caso de erro
     }
+  };
+
+  const handleVictory = () => {
+    setModal({ show: true, title: 'Parabéns, você venceu!' });
   };
 
   const handleTubeClick = async (index) => {
@@ -49,7 +54,7 @@ export default function App() {
 
           const venceu = await verificarVitoria();
           if (venceu.data === true) {
-            setModal({ show: true, title: 'TRY AGAIN' });
+            handleVictory();
           }
         } catch (error) {
           console.error("Erro ao mover bola ou verificar vitória:", error);
@@ -66,7 +71,8 @@ export default function App() {
 
   return (
     <div className="app">
-      <GameModal show={modal.show} title={modal.title} onStart={handleStartGame} />
+      <button className="restart-btn" onClick={handleStartGame}>Restart</button>
+      <GameModal show={modal.show} title={modal.title} onStart={handleStartGame} restartText={modal.title === 'Parabéns, você venceu!' ? 'Recomeçar' : undefined} />
       <div className="game-container">
         {/* 
           Cada 'tubo' aqui é um objeto Pilha do backend: { bolas: Array<BolaObjeto> } 

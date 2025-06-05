@@ -12,6 +12,7 @@ const cores = {
   pink: '#ff66b2',
   orange: '#ff9933',
   white: '#ffffff',
+  rosa: '#ff69b4',
 };
 
 export default function Tube({ bolas, onClick, isSelected, index }) {
@@ -19,8 +20,8 @@ export default function Tube({ bolas, onClick, isSelected, index }) {
 
   return (
     <div className={tubeClassName} onClick={onClick}>
-      {Array.from({ length: 4 }).map((_, i) => {
-        const bolaIndex = 3 - i;
+      {Array.from({ length: 7 }).map((_, i) => {
+        const bolaIndex = 6 - i;
         const cor = bolas[i];
 
         return (
