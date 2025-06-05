@@ -1,9 +1,9 @@
 
-# Bolas Tubes
+# BolasTubes
 
 Projeto da faculdade que teve como objetivo desafiar nossas capacidades de racicinios durante os assuntos estudados na matéria de Estrutura de Dados.
 
-BolaTubes é uma inspiração de jogos como Ball Sort Puzzle , Watter Sort Puzzle, onde existem tubos preenchidos bolas de variadas cores e o objetivo do usuario será preencher todos os tubos com as cores corretas, desafiando a capacidade cognitiva do usuario.
+BolaTubes é uma inspiração de jogos como Ball Sort Puzzle , Watter Sort Puzzle, onde existem tubos preenchidos com bolas de variadas cores e o objetivo do usuario será preencher todos os tubos com as cores corretas, desafiando a capacidade cognitiva do usuario.
 
 ## Roadmap
 
