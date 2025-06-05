@@ -26,7 +26,7 @@ BolaTubes é uma inspiração de jogos como Ball Sort Puzzle , Watter Sort Puzzl
 
 ## Instalação
 
-ré-requisitos:
+Pré-requisitos:
 Antes de iniciar, certifique-se de que os seguintes softwares estão instalados na sua máquina:
 
 Java JDK (versão 17 ou superior)
